@@ -1,0 +1,8 @@
+2019-09-24 03:21:35,410 [main] INFO casmex.utility.LogUtility -   SPRINT:  CS 2.7 S1
+2019-09-24 03:21:35,415 [main] INFO casmex.utility.LogUtility -   TITLE:  Regression Test Suite
+2019-09-24 03:21:35,416 [main] INFO casmex.utility.LogUtility -   MODULE:  CASMEX General
+2019-09-24 03:21:35,417 [main] INFO casmex.utility.LogUtility -   ASSIGNEE:  Renold Jose Thomas
+2019-09-24 03:21:35,418 [main] INFO casmex.utility.LogUtility -   DATE:  22-NOV-19
+2019-09-24 03:21:35,418 [main] INFO casmex.utility.LogUtility -   LINKED TO TESTCASE ID:  TC001
+2019-09-24 03:21:35,419 [main] INFO casmex.utility.LogUtility -   ENVIRONMENT:  QA Environment
+2019-09-24 03:22:20,868 [main] ERROR casmex.utility.LogUtility - FAILED:  executeTestCase   -   csPageObjects.RemittanceSearchTest
