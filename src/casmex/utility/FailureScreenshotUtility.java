@@ -32,7 +32,7 @@ public class FailureScreenshotUtility
 		}
 		catch(Exception sysEx)
 		{
-			log4j.error("getScreenshot", sysEx);
+			log4j.error("getScreenshot", sysEx.getMessage());
 			return sysEx.getMessage();
 		}
 	}

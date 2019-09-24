@@ -13,6 +13,7 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.reporter.ExtentLoggerReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
 public class ExtentReportsUtility {
@@ -23,6 +24,7 @@ public class ExtentReportsUtility {
 	private ExtentTest extentLogger;
 	private FailureScreenshotUtility capture;
 	private ExtentHtmlReporter htmlReporter;
+	private ExtentLoggerReporter config;
 
 	public ExtentReportsUtility() {
 		log4j = new LogUtility();
@@ -30,9 +32,11 @@ public class ExtentReportsUtility {
 		capture = new FailureScreenshotUtility();
 	}
 
-	public void setExtentReportsConfig(String pathHTML, String pathXML) {
-		extent = new ExtentReports();
+	public void setExtentReportsConfig(String pathHTML, String fileXML) {
 		htmlReporter = new ExtentHtmlReporter(new File(pathHTML));
+		config = new ExtentLoggerReporter("./src/");
+		config.loadXMLConfig(fileXML);
+		extent = new ExtentReports();
 		extent.attachReporter(htmlReporter);
 		htmlReporter.config().setTheme(Theme.DARK);
 	}
@@ -44,7 +48,7 @@ public class ExtentReportsUtility {
 				extent.setSystemInfo(excel.getCellData(data, 0), excel.getCellData(data, 1));
 			}
 		} catch (Exception sysEx) {
-			log4j.error("logExtentTestDetails", sysEx);
+			log4j.error("logExtentTestDetails", sysEx.getMessage());
 		}
 	}
 
@@ -53,11 +57,11 @@ public class ExtentReportsUtility {
 		extentLogger.log(Status.PASS, details);
 	}
 
-	public void logExtentFail(WebDriver driverInst, Exception driverEx, String testName)
+	public void logExtentFail(WebDriver driverInst, String errorMessage, String testName)
 	// Log Screenshot in Extent Report using the Screenshot File path
 	{
 		try {
-			log4j.error(testName, driverEx);
+			log4j.error(testName, errorMessage);
 
 			String dateTime = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
 			TakesScreenshot ts = (TakesScreenshot) driverInst;
@@ -67,10 +71,10 @@ public class ExtentReportsUtility {
 			FileUtils.copyFile(source, destination);
 
 			// extentLogger.log(Status.FAIL, info);
-			extentLogger.fail("TEST FAILED" + driverEx.getMessage()
+			extentLogger.fail("TEST FAILED" + errorMessage
 					+ extentLogger.addScreenCaptureFromPath(capture.getScreenshot(driverInst, testName)));
 		} catch (Exception sysEx) {
-			log4j.error("logExtentFail", sysEx);
+			log4j.error("logExtentFail", sysEx.getMessage());
 		}
 	}
 

@@ -1,14 +1,38 @@
 package casmex.test;
 
-import java.util.ArrayList;
+import java.util.Dictionary;
 
-public class RemittanceSearchTest {
+import org.testng.Assert;
 
-	public boolean remittanceSearchTest(ArrayList<String> testData) {
-		System.out.println(testData.get(0));
-		System.out.println(testData.get(1));
+import casmex.pages.GeneralActions;
+import casmex.pages.RemittanceActions;
 
+public class RemittanceSearchTest extends BaseTest {
+	
+	private GeneralActions general;
+	private RemittanceActions remittance;
+	
+	public RemittanceSearchTest() {
+		general = new GeneralActions();
+		remittance = new RemittanceActions();
+	}
+
+	public boolean remittanceSearchTest(Dictionary<String,String> testData) {
+		try {	
+			
+		//Arrange	
+		general.menuTransaction("Remittance");
+		remittance.searchRemittanceBy(testData.get("Search Type"), testData.get("Customer Code"));
+		
+		//Assert
+		Assert.assertEquals(remittance.getLast5Transactions(1), testData.get("Expected Result"));
+		
 		return true;
+		
+		} catch (Exception driverEx) {
+			exceptionMessage = driverEx.getMessage();
+			return false;
+		}
 	}
 
 }

@@ -7,8 +7,25 @@ public class GeneralActions extends BaseAction {
 	protected String objUsername = "//label//input[@placeholder = 'Username']";
 	protected String objPassword = "//label//input[@placeholder = 'Password']";
 	protected String objLogin = "//input[@type='submit' and @value='Sign in']";
-	protected String objLogout = "//li[10]/a/span[text()='Logout']";
+	protected String objLogout = "//a/span[text()='LOGOUT']";
+	
+	protected String objMenu = "//a[@class='bars']";
+	protected String objTransaction = "//li/a/span[text() ='Transaction']";
+	protected String objCash = "//li/a[text() ='Cash Receipt [F7]']";
+	protected String objRemittance = "//li/a[text() ='Remittance [F5]']";
 
+	//Get Remittance Page or Cash Receipt Page
+	public void menuTransaction(String page) {
+		System.out.println(parentDriver.toString());
+		
+		findElement(parentDriver, By.xpath(objMenu)).click();
+		findElement(parentDriver, By.xpath(objTransaction)).click();
+		if(page == "Remittance")
+			findElement(parentDriver, By.xpath(objCash)).click();
+		else if(page == "Cash Receipt")
+		findElement(parentDriver, By.xpath(objRemittance)).click();
+	}
+	
 	public void closeBrowser() {
 		parentDriver.close();
 	}

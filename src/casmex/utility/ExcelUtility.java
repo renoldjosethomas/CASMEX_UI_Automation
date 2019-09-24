@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Map;
 
 public class ExcelUtility {
@@ -22,7 +24,6 @@ public class ExcelUtility {
 
 	ArrayList<String> list;
 	public static int lastRowNumber;
-	public static int lastColNumber;
 
 	public ExcelUtility() {
 		log4j = new LogUtility();
@@ -36,7 +37,7 @@ public class ExcelUtility {
 			excelWSheet = excelWBook.getSheet(inputSheet);
 			lastRowNumber = excelWSheet.getLastRowNum();
 		} catch (IOException sysEx) {
-			log4j.error("setExcelConfig", sysEx);
+			log4j.error("setExcelConfig", sysEx.getMessage());
 		}
 	}
 
@@ -56,25 +57,32 @@ public class ExcelUtility {
 			excelWBook.write(excelFile);
 			excelFile.close();
 		} catch (IOException sysEx) {
-			log4j.error("writeResultToExcel", sysEx);
+			log4j.error("writeResultToExcel", sysEx.getMessage());
 		}
+	}
+	
+	public Dictionary<String,String> getTestData(int fromRowNum, int fromColNum) {
+		Dictionary<String,String> testData = new Hashtable<String,String>();
+		int lastColNumber = excelWSheet.getRow(fromRowNum).getPhysicalNumberOfCells();
+		for(int i = fromColNum; i <= lastColNumber - 1; i++) {
+			testData.put(getCellData(fromRowNum-1, i), getCellData(fromRowNum, i));
+		}
+		return testData;
 	}
 
 	public ArrayList<String> getRowData(int rowNum, int fromColNum, int toColNum) {
 		ArrayList<String> list = new ArrayList<String>();
-		lastColNumber = toColNum - 1;
-		for (int colNum = fromColNum; colNum <= lastColNumber; colNum++) {
+		for (int colNum = fromColNum; colNum <= toColNum - 1; colNum++) {
 			list.add(getCellData(rowNum, colNum));
 		}
 		return list;
 	}
 
-	public ArrayList<String> getRowData(int rowNum, int fromColNum) {
+	public ArrayList<String> getRowData(int fromRowNum, int fromColNum) {
 		ArrayList<String> list = new ArrayList<String>();
-		lastColNumber = excelWSheet.getRow(rowNum).getPhysicalNumberOfCells();
-		lastColNumber = lastColNumber - 1;
-		for (int colNum = fromColNum; colNum <= lastColNumber; colNum++) {
-			list.add(getCellData(rowNum, colNum));
+		int lastColNumber = excelWSheet.getRow(fromRowNum).getPhysicalNumberOfCells();
+		for (int colNum = fromColNum; colNum <= lastColNumber - 1; colNum++) {
+			list.add(getCellData(fromRowNum, colNum));
 		}
 		return list;
 	}
@@ -114,5 +122,27 @@ public class ExcelUtility {
 			cellData = "EmptyCell";
 		}
 		return cellData;
+	}
+	
+	public void logTestDetails(int fromRow, int toRow)
+	//Log test details like Sprint, Version, Author, Date, etc.. in Log4j file
+	{
+		try
+		{
+			String logMessage = "";
+			for (int itr = fromRow ; itr <= toRow ; itr++)
+	        {
+				for(int cellNum = 0; cellNum <= 1; cellNum++)
+				{
+					logMessage = logMessage + "  " + getCellData(itr, cellNum).toString();
+				}
+				log4j.info(logMessage);
+				logMessage = "";
+			}		
+		}
+		catch(Exception sysEx)
+		{
+			log4j.error("logTestDetails", sysEx.getMessage());
+		}
 	}
 }

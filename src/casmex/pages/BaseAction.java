@@ -21,17 +21,17 @@ import casmex.utility.LogUtility;
 public class BaseAction {
 
 	public static WebDriver parentDriver;
-	protected static Actions parentAction;
-	protected static Select parentSelect;
-	protected static WebDriverWait parentWait;
-	protected static FluentWait<WebDriver> parentFluentWait;
-	protected static ArrayList<String> browserTabs;
+	public static Actions parentAction;
+	public static Select parentSelect;
+	public static WebDriverWait parentWait;
+	public static FluentWait<WebDriver> parentFluentWait;
+	public static ArrayList<String> browserTabs;
 
 	public static WebDriver childDriver;
-	protected static Actions childAction;
-	protected static Select childSelect;
-	protected static WebDriverWait childWait;
-	protected static FluentWait<WebDriver> childFluentWait;
+	public static Actions childAction;
+	public static Select childSelect;
+	public static WebDriverWait childWait;
+	public static FluentWait<WebDriver> childFluentWait;
 
 	public String actionDescription;
 
@@ -42,13 +42,12 @@ public class BaseAction {
 		System.out.println("Base Action Initalized");
 	}
 
-	public WebDriver initDriverInstance(WebDriver driver, String key, String path) {
+	public void initDriverInstance(String key, String path) {
 		// Initialize browser.
 		System.setProperty(key, path);
-		driver = new ChromeDriver();
-		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-		driver.manage().window().maximize();
-		return driver;
+		parentDriver = new ChromeDriver();
+		parentDriver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+		parentDriver.manage().window().maximize();
 	}
 
 	public WebElement findElement(WebDriver driver, By by) {
@@ -65,7 +64,7 @@ public class BaseAction {
 			}
 			return element;
 		} catch (Exception sysEx) {
-			log4j.error("findElement", sysEx);
+			log4j.error("findElement", sysEx.getMessage());
 			return element;
 		}
 	}
@@ -79,23 +78,37 @@ public class BaseAction {
 			}
 			return element;
 		} catch (Exception sysEx) {
-			log4j.error("mouseHover", sysEx);
+			log4j.error("mouseHover", sysEx.getMessage());
 			return element;
 		}
 	}
 
-	public void initDriverActions(WebDriver driver) {
+	public Actions initDriverActions(WebDriver driver) {
 		if (driver == parentDriver) {
 			parentAction = new Actions(driver);
 			parentWait = new WebDriverWait(driver, 30);
 			parentFluentWait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(10))
 					.pollingEvery(Duration.ofSeconds(5)).ignoring(NoSuchElementException.class);
+			return parentAction;
 		} else if (driver == childDriver) {
 			childAction = new Actions(driver);
 			childWait = new WebDriverWait(driver, 30);
 			childFluentWait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(10))
 					.pollingEvery(Duration.ofSeconds(5)).ignoring(NoSuchElementException.class);
+			return childAction;
 		}
+		return null;
+	}
+	
+	public Select select(WebDriver driver, WebElement element) {
+		if (driver == parentDriver) {
+			parentSelect = new Select(element);
+			return parentSelect;
+		} else if (driver == childDriver) {
+			childSelect = new Select(element);
+			return childSelect;
+		}
+		return null;
 	}
 
 	public void openNewTab() {
