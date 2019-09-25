@@ -29,6 +29,17 @@ public class BaseTest {
 			return false;
 		}
 	}
+	
+	public boolean getHomePage() {
+		try {
+			general.homePage();
+			return true;
+
+		} catch (Exception driverEx) {
+			exceptionMessage = driverEx.getMessage();
+			return false;
+		}
+	}
 
 	public boolean logout() {
 		try {
@@ -44,9 +55,11 @@ public class BaseTest {
 	public boolean executeTestCase(ArrayList<String> testDetails, Dictionary<String,String> testData)
 	// Invoke methods using action_keyword in Test Case
 	{
+		boolean result = false;;
 		try {
 			
 			Class<?> classRef = Class.forName("casmex.test." + testDetails.get(0));
+			
 			// Dynamically create instances of classes
 			Object classInst = (Object) classRef.newInstance();
 			Method method[] = classInst.getClass().getMethods();
@@ -55,14 +68,20 @@ public class BaseTest {
 					if (testData.isEmpty()) {
 						// invoking page object methods without arguments
 						System.out.println("Test Data Empty");
-						method[i].invoke(classInst);
+						Object value = method[i].invoke(classInst);
+						result = (boolean) value;
+						break;
 					} else {
 						// invoking page object methods with arguments
-						method[i].invoke(classInst, testData);
+						Object value = method[i].invoke(classInst, testData);
+						result = (boolean) value;
+						break;
 					}
 				}
 			}
-			return true;
+			
+			return result;
+			
 		} catch (IllegalAccessException | InstantiationException | IllegalArgumentException | InvocationTargetException
 				| ClassNotFoundException sysEx) {
 //			log4j.error("executeTestCase", sysEx.getMessage());

@@ -87,15 +87,6 @@ public class ExcelUtility {
 		return list;
 	}
 
-	// public ArrayList<String> storeTestDetails(int fromRow, int toRow) {
-	// ArrayList<String> list = new ArrayList<String>();
-	// for(int row = fromRow; row <= toRow; row++) {
-	// list.add(getCellData(row, 0));
-	// list.add(getCellData(row, 1));
-	// }
-	// return list;
-	// }
-
 	public void setCellData(int iRow, int iCell, String data) {
 		// Write Data to a particular cell in Excel File
 		// Retrieve the row and check for null

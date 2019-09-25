@@ -16,8 +16,6 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import casmex.utility.LogUtility;
-
 public class BaseAction {
 
 	public static WebDriver parentDriver;
@@ -34,14 +32,7 @@ public class BaseAction {
 	public static FluentWait<WebDriver> childFluentWait;
 
 	public String actionDescription;
-
-	protected LogUtility log4j;
-
-	public BaseAction() {
-		log4j = new LogUtility();
-		System.out.println("Base Action Initalized");
-	}
-
+	
 	public void initDriverInstance(String key, String path) {
 		// Initialize browser.
 		System.setProperty(key, path);
@@ -53,6 +44,7 @@ public class BaseAction {
 	public WebElement findElement(WebDriver driver, By by) {
 		WebElement element = null;
 		try {
+			Thread.sleep(1600);
 			if (driver == parentDriver) {
 				element = parentDriver.findElement(by);
 				parentWait.until(ExpectedConditions.visibilityOf(element));
@@ -64,21 +56,6 @@ public class BaseAction {
 			}
 			return element;
 		} catch (Exception sysEx) {
-			log4j.error("findElement", sysEx.getMessage());
-			return element;
-		}
-	}
-
-	public WebElement mouseHover(WebDriver driver, WebElement element) {
-		try {
-			if (driver == parentDriver) {
-				parentAction.moveToElement(element);
-			} else if (driver == childDriver) {
-				childAction.moveToElement(element);
-			}
-			return element;
-		} catch (Exception sysEx) {
-			log4j.error("mouseHover", sysEx.getMessage());
 			return element;
 		}
 	}
@@ -100,7 +77,8 @@ public class BaseAction {
 		return null;
 	}
 	
-	public Select select(WebDriver driver, WebElement element) {
+	public Select select(WebDriver driver, By by) {
+		WebElement element = findElement(driver, by);
 		if (driver == parentDriver) {
 			parentSelect = new Select(element);
 			return parentSelect;

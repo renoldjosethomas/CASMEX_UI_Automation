@@ -2,39 +2,54 @@ package casmex.pages;
 
 import org.openqa.selenium.By;
 
+import casmex.utility.ExtentReportsUtility;
+
 public class GeneralActions extends BaseAction {
+
 	// Path of Page Objects
-	protected String objUsername = "//label//input[@placeholder = 'Username']";
-	protected String objPassword = "//label//input[@placeholder = 'Password']";
-	protected String objLogin = "//input[@type='submit' and @value='Sign in']";
-	protected String objLogout = "//a/span[text()='LOGOUT']";
+	private String objUsername = "//label//input[@placeholder = 'Username']";
+	private String objPassword = "//label//input[@placeholder = 'Password']";
+	private String objLogin = "//input[@type='submit' and @value='Sign in']";
+	private String objLogout = "//a/span[text()='LOGOUT']";
 	
-	protected String objMenu = "//a[@class='bars']";
-	protected String objTransaction = "//li/a/span[text() ='Transaction']";
-	protected String objCash = "//li/a[text() ='Cash Receipt [F7]']";
-	protected String objRemittance = "//li/a[text() ='Remittance [F5]']";
+	private String objHomePage = "//span[@id='lblExchangeHeader']";
+	private String objMenu = "//a[@class='bars']";
+	private String objTransaction = "//li/a/span[text() ='Transaction']";
+	private String objCash = "//li/a[text() ='Cash Receipt [F7]']";
+	private String objRemittance = "//li/a[text() ='Remittance [F5]']";
+	
+	private ExtentReportsUtility report;
+	
+	public GeneralActions() {
+		report = new ExtentReportsUtility();
+	}
 
 	//Get Remittance Page or Cash Receipt Page
 	public void menuTransaction(String page) {
-		System.out.println(parentDriver.toString());
-		
-		findElement(parentDriver, By.xpath(objMenu)).click();
-		findElement(parentDriver, By.xpath(objTransaction)).click();
-		if(page == "Remittance")
-			findElement(parentDriver, By.xpath(objCash)).click();
-		else if(page == "Cash Receipt")
-		findElement(parentDriver, By.xpath(objRemittance)).click();
+		if(page == "Remittance") {
+			parentDriver.get("http://182.72.164.246:91/oiexc/CASMEX/transaction/Remittance.aspx?mode=R");
+			report.nodeTestPass("Navigate to Remittance Page");
+		} else if(page == "Cash Receipt") {
+			parentDriver.get("http://182.72.164.246:91/OIEXC/CASMEX/transaction/cashreceive.aspx");
+			report.nodeTestPass("Navigate to Remittance Page");
+		}
 	}
+	
+	public void homePage() {
+		findElement(parentDriver, By.xpath(objHomePage)).click();
+	}
+
 	
 	public void closeBrowser() {
 		parentDriver.close();
 	}
 
-	public void performLogin(String url, String username, String password) {
+	public void performLogin(String url, String username, String password) throws InterruptedException {
 		parentDriver.get(url);
 		findElement(parentDriver, By.xpath(objUsername)).sendKeys(username);
 		findElement(parentDriver, By.xpath(objPassword)).sendKeys(password);
 		findElement(parentDriver, By.xpath(objLogin)).click();
+		Thread.sleep(3000);
 	}
 
 	public void performLogout() {

@@ -1,11 +1,9 @@
-2019-09-25 02:21:46,556 [main] INFO casmex.utility.LogUtility -   SPRINT:  CS 2.7 S1
-2019-09-25 02:21:46,563 [main] INFO casmex.utility.LogUtility -   TITLE:  Regression Test Suite
-2019-09-25 02:21:46,564 [main] INFO casmex.utility.LogUtility -   MODULE:  CASMEX General
-2019-09-25 02:21:46,566 [main] INFO casmex.utility.LogUtility -   ASSIGNEE:  Renold Jose Thomas
-2019-09-25 02:21:46,567 [main] INFO casmex.utility.LogUtility -   DATE:  22-NOV-19
-2019-09-25 02:21:46,568 [main] INFO casmex.utility.LogUtility -   LINKED TO TESTCASE ID:  TC001
-2019-09-25 02:21:46,569 [main] INFO casmex.utility.LogUtility -   ENVIRONMENT:  QA Environment
-2019-09-25 02:21:51,713 [main] ERROR casmex.utility.LogUtility - FAILED:  findElement   -   null
-2019-09-25 02:21:51,957 [main] ERROR casmex.utility.LogUtility - FAILED:  findElement   -   null
-2019-09-25 02:21:52,226 [main] ERROR casmex.utility.LogUtility - FAILED:  findElement   -   null
-2019-09-25 02:25:06,194 [main] ERROR casmex.utility.LogUtility - FAILED:  findElement   -   null
+2019-09-26 04:36:50,501 [main] INFO casmex.utility.LogUtility -   SPRINT:  CS 2.7 S1
+2019-09-26 04:36:50,511 [main] INFO casmex.utility.LogUtility -   TITLE:  Regression Test Suite
+2019-09-26 04:36:50,511 [main] INFO casmex.utility.LogUtility -   MODULE:  CASMEX General
+2019-09-26 04:36:50,511 [main] INFO casmex.utility.LogUtility -   ASSIGNEE:  Renold Jose Thomas
+2019-09-26 04:36:50,511 [main] INFO casmex.utility.LogUtility -   DATE:  22-NOV-19
+2019-09-26 04:36:50,511 [main] INFO casmex.utility.LogUtility -   LINKED TO TESTCASE ID:  TC001
+2019-09-26 04:36:50,511 [main] INFO casmex.utility.LogUtility -   ENVIRONMENT:  QA Environment
+2019-09-26 04:37:20,577 [main] INFO casmex.utility.LogUtility - TC001 - Search for customer code and verify if the latest transaction from the last 5 transactions is valid.
+2019-09-26 04:37:40,333 [main] INFO casmex.utility.LogUtility - TC002 - Search for mobile and verify if the beneficiary name tagged to this mobile number appears correctly.

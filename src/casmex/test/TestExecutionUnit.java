@@ -8,6 +8,7 @@ import java.util.Dictionary;
 import java.util.Properties;
 
 import casmex.pages.BaseAction;
+import casmex.utility.EmailUtility;
 import casmex.utility.ExcelUtility;
 import casmex.utility.ExtentReportsUtility;
 import casmex.utility.LogUtility;
@@ -16,13 +17,15 @@ public class TestExecutionUnit {
 	private static Properties configFile;
 	
 	
-	public static void main(String args[]) throws Exception {
+	public static void main(String args[]) {
 		// Initializing Instance of the following classes to use their methods
-		ExtentReportsUtility report = new ExtentReportsUtility();
+		
 		LogUtility log = new LogUtility();
 		BaseTest testBase = new BaseTest();
 		BaseAction actBase = new BaseAction();
+		EmailUtility mail = new EmailUtility();
 		ExcelUtility excel = new ExcelUtility();
+		ExtentReportsUtility report = new ExtentReportsUtility();
 		
 		loadConfigFile(configFile = new Properties());
 
@@ -57,25 +60,23 @@ public class TestExecutionUnit {
 					configFile.getProperty("password"));
 			
 			// Log test case in the report (Test Case Name)
-			report.logExtentTestCase(testDetails.get(2));
+			report.logTestCase(testDetails.get(2));
 			
 			// Execute Test Case
 			if(testBase.executeTestCase(testDetails, testData) == true)
-				report.logExtentPass("Test Passed");
+				report.testPass("Test Passed");
 			else
-				report.logExtentFail(BaseAction.parentDriver, testBase.exceptionMessage, testDetails.get(2));
+				report.testFail(BaseAction.parentDriver, testBase.exceptionMessage, testDetails.get(2));
 			
 			//Logout
 			testBase.logout();
 			
-			// Wait for Success Toasters to Dissolve
-			Thread.sleep(2000);
-			
 			// Log test case information in log4j file
 			log.info(testDetails.get(2));
 		}
+		
 		report.endExtentReports();
-		// mail.sendEmailReport();
+		mail.sendEmailReport();
 		System.out.println("--------- UI AUTOMATION SUITE SUCCESSFULLY RUN ---------");
 	}
 

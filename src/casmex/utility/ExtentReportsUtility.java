@@ -11,9 +11,7 @@ import org.openqa.selenium.WebDriver;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
-import com.aventstack.extentreports.reporter.ExtentLoggerReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
 public class ExtentReportsUtility {
@@ -21,10 +19,10 @@ public class ExtentReportsUtility {
 	private LogUtility log4j;
 	private ExcelUtility excel;
 	private ExtentReports extent;
-	private ExtentTest extentLogger;
+	private static ExtentTest test;
 	private FailureScreenshotUtility capture;
 	private ExtentHtmlReporter htmlReporter;
-	private ExtentLoggerReporter config;
+//	private ExtentLoggerReporter config;
 
 	public ExtentReportsUtility() {
 		log4j = new LogUtility();
@@ -34,11 +32,13 @@ public class ExtentReportsUtility {
 
 	public void setExtentReportsConfig(String pathHTML, String fileXML) {
 		htmlReporter = new ExtentHtmlReporter(new File(pathHTML));
-		config = new ExtentLoggerReporter("./src/");
-		config.loadXMLConfig(fileXML);
+//		config = new ExtentLoggerReporter("./src/");
+//		config.loadXMLConfig(fileXML);
 		extent = new ExtentReports();
 		extent.attachReporter(htmlReporter);
-		htmlReporter.config().setTheme(Theme.DARK);
+		htmlReporter.config().setDocumentTitle("CASMEX Test Automation Report"); 
+		htmlReporter.config().setReportName("End to End Test Scenario"); 
+		htmlReporter.config().setTheme(Theme.DARK);	
 	}
 
 	public void logExtentTestDetails(int fromRow, int toRow) {
@@ -52,12 +52,12 @@ public class ExtentReportsUtility {
 		}
 	}
 
-	public void logExtentPass(String details) {
+	public void testPass(String details) {
 		// Log PASS in Extent Report with the Pass Message
-		extentLogger.log(Status.PASS, details);
+		test.pass(details);
 	}
 
-	public void logExtentFail(WebDriver driverInst, String errorMessage, String testName)
+	public void testFail(WebDriver driverInst, String errorMessage, String testName)
 	// Log Screenshot in Extent Report using the Screenshot File path
 	{
 		try {
@@ -71,16 +71,20 @@ public class ExtentReportsUtility {
 			FileUtils.copyFile(source, destination);
 
 			// extentLogger.log(Status.FAIL, info);
-			extentLogger.fail("TEST FAILED" + errorMessage
-					+ extentLogger.addScreenCaptureFromPath(capture.getScreenshot(driverInst, testName)));
+			test.fail("TEST FAILED" + errorMessage
+					+ test.addScreenCaptureFromPath(capture.getScreenshot(driverInst, testName)));
 		} catch (Exception sysEx) {
 			log4j.error("logExtentFail", sysEx.getMessage());
 		}
 	}
 
-	public void logExtentTestCase(String testName) {
+	public void logTestCase(String testName) {
 		// Log PASS in Extent Report with the Pass Message
-		extent.createTest(testName);
+		test = extent.createTest(testName);
+	}
+	
+	public void nodeTestPass(String nodeTestDescription) {
+		test.createNode(nodeTestDescription).pass("Pass");
 	}
 
 	public void endExtentReports() {
